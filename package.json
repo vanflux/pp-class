@@ -1,0 +1,22 @@
+{
+  "name": "pp-class",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/vanflux/pp-class.git",
+  "author": "lucasabruzzi <lucasabruzzi@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.2.1",
+    "chokidar": "^3.5.3",
+    "dotenv": "^16.0.3",
+    "jimp": "^0.22.7",
+    "node-ssh": "^13.1.0",
+    "prettier": "^2.8.8",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "start": "npx ts-node-dev --respawn src/lad-test/index.ts",
+    "format": "npx prettier --write ."
+  }
+}

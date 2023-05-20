@@ -1,0 +1,6 @@
+node_modules
+.env
+golly-4.2-gtk-64bit
+tmp
+out
+old
