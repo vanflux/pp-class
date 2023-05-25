@@ -1,9 +1,11 @@
 import EventEmitter from 'events';
 import { NodeSSH } from 'node-ssh';
 import { Allocation } from './allocation';
+import { Readable } from 'stream';
 
 export interface LadConnectOptions {
   registry: string;
+  userPrefix: string;
   groupNum: number;
   spartaPass: string;
   gradPass: string;
@@ -14,6 +16,11 @@ export class Lad extends EventEmitter {
   private gradSsh?: NodeSSH;
   private connecting = false;
   private connected = false;
+
+  private ensureConnected() {
+    if (!this.connected) throw new Error('Not connected');
+    if (!this.gradSsh) throw new Error('Undefined gradSsh');
+  }
 
   async connect(options: LadConnectOptions) {
     if (this.connecting) return;
@@ -34,7 +41,7 @@ export class Lad extends EventEmitter {
     this.gradSsh = new NodeSSH();
     await this.gradSsh.connect({
       sock: gradChannel,
-      username: `pp030${String(options.groupNum).padStart(2, '0')}`,
+      username: `${options.userPrefix}${String(options.groupNum).padStart(2, '0')}`,
       password: options.gradPass,
       timeout: 60 * 1000,
     });
@@ -44,26 +51,41 @@ export class Lad extends EventEmitter {
     this.emit('connected');
   }
 
-  async alloc(stdin: string, nodes = 1, timeMinutes = 1, exclusive = true) {
+  async alloc(nodes = 1, timeMinutes = 1, exclusive = true) {
     if (!this.connected) throw new Error('Not connected');
     return new Promise<Allocation>((resolve, reject) => {
       if (!this.gradSsh) return reject(new Error('Undefined gradSsh'));
+      const stdin = new Readable({ read: () => true });
       this.gradSsh.exec('/LADAPPs/ladscripts/ladalloc', ['-n', String(nodes), '-t', String(timeMinutes), exclusive ? '-e' : '-s'], {
         execOptions: {
           pty: true,
         },
-        onChannel: (channel) => {
-          resolve(new Allocation(channel));
+        onChannel: async (channel) => {
+          resolve(new Allocation(stdin, channel));
         },
         stdin
       });
     });
   }
 
+  async exec(command: string, parameters: string[] = []) {
+    this.ensureConnected();
+    return this.gradSsh!.exec(command, parameters);
+  }
+
+  async getFile(localFile: string, remoteFile: string) {
+    this.ensureConnected();
+    return this.gradSsh!.getFile(localFile, remoteFile);
+  }
+
+  async putFile(localFile: string, remoteFile: string) {
+    this.ensureConnected();
+    return this.gradSsh!.putFile(localFile, remoteFile);
+  }
+
   async info() {
-    if (!this.connected) throw new Error('Not connected');
-    if (!this.gradSsh) throw new Error('Undefined gradSsh');
-    return this.gradSsh.exec('/LADAPPs/ladscripts/ladinfo', [], {
+    this.ensureConnected();
+    return this.gradSsh!.exec('/LADAPPs/ladscripts/ladinfo', [], {
       execOptions: {
         pty: true,
       },
