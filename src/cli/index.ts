@@ -6,6 +6,7 @@ import { helpCommandHandler } from './handlers/help';
 import { CommandHandler } from './command-handler';
 import { t1CommandHandlers, t1Setup } from '../t1-omp';
 import { t2CommandHandlers, t2Setup } from '../t2-mpi';
+import { infoCommandHandler } from './handlers/info';
 
 export interface CLIContext {
   commandHandlers: CommandHandler[];
@@ -31,6 +32,7 @@ async function main() {
 
   const commandHandlers = [
     helpCommandHandler,
+    infoCommandHandler,
     ...tCommandHandlers,
   ]
   const rl = createInterface({ input: stdin, output: stdout });

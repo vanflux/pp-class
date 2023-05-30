@@ -2,6 +2,8 @@ import EventEmitter from 'events';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
 import { escape } from './utils';
 import { LadRun, LadRunOptions } from './run';
+import { parseInfo } from './info-parser';
+
 export interface LadConnectOptions {
   registry: string;
   userPrefix: string;
@@ -83,10 +85,13 @@ export class Lad extends EventEmitter {
   }
 
   async info() {
-    return this.exec('ladinfo', {
+    const result = await this.exec('ladinfo', {
       execOptions: {
         pty: true,
       },
     });
+    if (result.code !== 0) return;
+    const output = result.stdout;
+    return parseInfo(output);
   }
 }
