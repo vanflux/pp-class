@@ -1,4 +1,3 @@
-
 export interface LadInfoRow {
   nodeList: string;
   nodes: number;
@@ -14,20 +13,30 @@ export interface LadInfoRow {
 }
 
 export function parseInfo(text: string) {
-  const lines = text.split('\n').map(line => line.trim());
-  const headerIndex = lines.findIndex(line => line.includes('NODELIST'));
+  const lines = text.split('\n').map((line) => line.trim());
+  const headerIndex = lines.findIndex((line) => line.includes('NODELIST'));
   const headerLine = lines[headerIndex];
-  let nodeListStartI = 0 , nodeListEndI = 0,
-      nodesStartI = 0 , nodesEndI = 0,
-      partitionStartI = 0 , partitionEndI = 0,
-      stateStartI = 0 , stateEndI = 0,
-      cpusStartI = 0 , cpusEndI = 0,
-      sctStartI = 0 , sctEndI = 0,
-      memoryStartI = 0 , memoryEndI = 0,
-      tmpDiskStartI = 0 , tmpDiskEndI = 0,
-      weightStartI = 0 , weightEndI = 0,
-      availableStartI = 0 , availableEndI = 0,
-      reasonStartI = 0;
+  let nodeListStartI = 0,
+    nodeListEndI = 0,
+    nodesStartI = 0,
+    nodesEndI = 0,
+    partitionStartI = 0,
+    partitionEndI = 0,
+    stateStartI = 0,
+    stateEndI = 0,
+    cpusStartI = 0,
+    cpusEndI = 0,
+    sctStartI = 0,
+    sctEndI = 0,
+    memoryStartI = 0,
+    memoryEndI = 0,
+    tmpDiskStartI = 0,
+    tmpDiskEndI = 0,
+    weightStartI = 0,
+    weightEndI = 0,
+    availableStartI = 0,
+    availableEndI = 0,
+    reasonStartI = 0;
   let lastI = 0;
   const isEmpty = (c: string) => c === ' ' || c === '\t';
   for (let i = 1; i <= headerLine.length; i++) {

@@ -13,4 +13,3 @@ Rodar: `yarn t1`
 ## T2 - MPI
 
 Rodar: `yarn t2`
-

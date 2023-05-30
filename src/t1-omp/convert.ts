@@ -1,6 +1,6 @@
-import { resolve } from "path";
-import { dataScenesPath } from "./paths";
-import { readFileSync, writeFileSync } from "fs";
+import { resolve } from 'path';
+import { dataScenesPath } from './paths';
+import { readFileSync, writeFileSync } from 'fs';
 
 const outPath = resolve(dataScenesPath, 'scene-1.txt');
 const inputPath = resolve(__dirname, '../input.txt');

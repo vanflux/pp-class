@@ -1,4 +1,4 @@
-import { CLIContext } from ".";
+import { CLIContext } from '.';
 
 export interface CommandHandlerResult {
   stopPropagation: boolean;

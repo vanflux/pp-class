@@ -1,7 +1,7 @@
-import { SSHExecCommandResponse } from "node-ssh";
-import { Lad } from "./lad";
-import { escape } from "./utils";
-import EventEmitter from "events";
+import { SSHExecCommandResponse } from 'node-ssh';
+import { Lad } from './lad';
+import { escape } from './utils';
+import EventEmitter from 'events';
 
 export interface LadRunOptions {
   command: string;
@@ -17,7 +17,7 @@ export class LadRun extends EventEmitter {
   constructor(lad: Lad, options: LadRunOptions) {
     super();
     const self = this;
-    this.responsePromise = new Promise(async resolve => {
+    this.responsePromise = new Promise(async (resolve) => {
       let command = '';
       command += 'srun --cpu-bind=none';
       command += options.shared ? '' : ' --exclusive';
@@ -32,10 +32,10 @@ export class LadRun extends EventEmitter {
       const response = await lad.exec(command);
       resolve(response);
       self.emit('end');
-    })
+    });
   }
 
   async getOutput() {
-    return this.responsePromise.then(response => `${response.stdout ?? ''}${response.stderr ?? ''}`);
+    return this.responsePromise.then((response) => `${response.stdout ?? ''}${response.stderr ?? ''}`);
   }
 }

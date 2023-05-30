@@ -1,4 +1,4 @@
-import { CommandHandler } from "../command-handler";
+import { CommandHandler } from '../command-handler';
 
 export const helpCommandHandler: CommandHandler = {
   name: 'Help',

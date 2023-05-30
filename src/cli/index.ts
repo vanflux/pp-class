@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { stdin, stdout } from "process";
-import { Interface, createInterface } from "readline";
-import { Lad, LadConfigHelper } from "../lad-lib";
+import { stdin, stdout } from 'process';
+import { Interface, createInterface } from 'readline';
+import { Lad, LadConfigHelper } from '../lad-lib';
 import { helpCommandHandler } from './handlers/help';
 import { CommandHandler } from './command-handler';
 import { t1CommandHandlers, t1Setup } from '../t1-omp';
@@ -21,20 +21,18 @@ async function nextCmd(rl: Interface, text: string) {
 
 async function main() {
   const t = process.argv[2];
-  const tCommandHandlers = {
-    t1: t1CommandHandlers,
-    t2: t2CommandHandlers,
-  }[t] ?? [];
-  const tSetup = {
-    t1: t1Setup,
-    t2: t2Setup,
-  }[t] ?? (() => {});
+  const tCommandHandlers =
+    {
+      t1: t1CommandHandlers,
+      t2: t2CommandHandlers,
+    }[t] ?? [];
+  const tSetup =
+    {
+      t1: t1Setup,
+      t2: t2Setup,
+    }[t] ?? (() => {});
 
-  const commandHandlers = [
-    helpCommandHandler,
-    infoCommandHandler,
-    ...tCommandHandlers,
-  ]
+  const commandHandlers = [helpCommandHandler, infoCommandHandler, ...tCommandHandlers];
   const rl = createInterface({ input: stdin, output: stdout });
   const config = LadConfigHelper.fromEnv();
   const lad = new Lad();

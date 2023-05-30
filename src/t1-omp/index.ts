@@ -1,9 +1,9 @@
-import { mkdirSync, readFileSync, readdirSync, statSync } from "fs";
-import { basename } from "path";
-import { dataScenesPath, imageOutPath, outPath, programOutPath, srcProgramParallelPath, srcProgramSerialPath } from "./paths";
-import Jimp from "jimp";
-import { Lad } from "../lad-lib";
-import { watch } from "chokidar";
+import { mkdirSync, readFileSync, readdirSync, statSync } from 'fs';
+import { basename } from 'path';
+import { dataScenesPath, imageOutPath, outPath, programOutPath, srcProgramParallelPath, srcProgramSerialPath } from './paths';
+import Jimp from 'jimp';
+import { Lad } from '../lad-lib';
+import { watch } from 'chokidar';
 import { CommandHandler } from '../cli/command-handler';
 import { CLIContext } from '../cli';
 

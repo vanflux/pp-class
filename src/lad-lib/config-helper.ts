@@ -1,4 +1,4 @@
-import { LadConnectOptions } from "./lad";
+import { LadConnectOptions } from './lad';
 
 export class LadConfigHelper {
   static fromEnv(): LadConnectOptions {

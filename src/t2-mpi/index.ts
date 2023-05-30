@@ -1,8 +1,8 @@
-import { Lad } from "../lad-lib";
-import { watch } from "chokidar";
+import { Lad } from '../lad-lib';
+import { watch } from 'chokidar';
 import { srcProgramHello } from './paths';
 import { CLIContext } from '../cli';
-import { CommandHandler } from "../cli/command-handler";
+import { CommandHandler } from '../cli/command-handler';
 
 function watchFiles(lad: Lad) {
   watch(srcProgramHello).on('all', async () => {

@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from 'path';
 
 const dataScenesPath = resolve(__dirname, './scenes');
 const programPath = resolve(__dirname, './program');
@@ -8,12 +8,4 @@ const outPath = resolve(__dirname, './out');
 const programOutPath = resolve(outPath, 'output.txt');
 const imageOutPath = resolve(outPath, 'output.png');
 
-export {
-  dataScenesPath,
-  programPath,
-  srcProgramSerialPath,
-  srcProgramParallelPath,
-  outPath,
-  programOutPath,
-  imageOutPath,
-};
+export { dataScenesPath, programPath, srcProgramSerialPath, srcProgramParallelPath, outPath, programOutPath, imageOutPath };
