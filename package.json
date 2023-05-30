@@ -16,9 +16,8 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "dev": "yarn start",
-    "start": "npx ts-node-dev --respawn src/lad-test/index.ts",
-    "t1": "npx ts-node-dev --respawn src/t1-open-mp/index.ts",
+    "t1": "npx ts-node-dev --respawn src/cli/index.ts t1",
+    "t2": "npx ts-node-dev --respawn src/cli/index.ts t2",
     "format": "npx prettier --write ."
   }
 }

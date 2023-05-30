@@ -1,8 +1,7 @@
 import EventEmitter from 'events';
-import { NodeSSH } from 'node-ssh';
-import { Allocation } from './allocation';
-import { Readable } from 'stream';
-
+import { NodeSSH, SSHExecOptions } from 'node-ssh';
+import { escape } from './utils';
+import { LadRun, LadRunOptions } from './run';
 export interface LadConnectOptions {
   registry: string;
   userPrefix: string;
@@ -16,6 +15,10 @@ export class Lad extends EventEmitter {
   private gradSsh?: NodeSSH;
   private connecting = false;
   private connected = false;
+
+  private getDefaultCommand() {
+    return 'export PATH+=":/LADAPPs/OpenMPI/openmpi-4.1.1/bin:/LADAPPs/ladscripts:"';
+  }
 
   private ensureConnected() {
     if (!this.connected) throw new Error('Not connected');
@@ -45,32 +48,16 @@ export class Lad extends EventEmitter {
       password: options.gradPass,
       timeout: 60 * 1000,
     });
-    const user = await this.gradSsh.exec('whoami', []);
+    const whoamiResponse = await this.gradSsh.execCommand('whoami');
+    const user = whoamiResponse.code === 0 ? whoamiResponse.stdout : 'ERROR'
     this.connected = true;
     this.emit('grad_connected', { user });
     this.emit('connected');
   }
 
-  async alloc(nodes = 1, timeMinutes = 1, exclusive = true) {
-    if (!this.connected) throw new Error('Not connected');
-    return new Promise<Allocation>((resolve, reject) => {
-      if (!this.gradSsh) return reject(new Error('Undefined gradSsh'));
-      const stdin = new Readable({ read: () => true });
-      this.gradSsh.exec('/LADAPPs/ladscripts/ladalloc', ['-n', String(nodes), '-t', String(timeMinutes), exclusive ? '-e' : '-s'], {
-        execOptions: {
-          pty: true,
-        },
-        onChannel: async (channel) => {
-          resolve(new Allocation(stdin, channel));
-        },
-        stdin
-      });
-    });
-  }
-
-  async exec(command: string, parameters: string[] = []) {
+  async exec(command: string, options?: (SSHExecOptions & { stream?: "stdout" | "stderr" | undefined; }) | undefined) {
     this.ensureConnected();
-    return this.gradSsh!.exec(command, parameters);
+    return this.gradSsh!.execCommand(`${this.getDefaultCommand()};${command}`, options);
   }
 
   async getFile(localFile: string, remoteFile: string) {
@@ -83,9 +70,20 @@ export class Lad extends EventEmitter {
     return this.gradSsh!.putFile(localFile, remoteFile);
   }
 
+  async compile(isCpp: boolean, omp: boolean, mpi: boolean, inputPath: string, outputPath: string) {
+    const compiler = isCpp ? (mpi ? 'mpiCC' : 'g++') : (mpi ? 'mpicc' : 'gcc');
+    const flags = omp ? '-fopenmp' : ''; 
+    const input = escape(inputPath);
+    const output = escape(outputPath);
+    return this.exec(`${compiler} ${flags} -o "${output}" "${input}"`);
+  }
+
+  run(options: LadRunOptions) {
+    return new LadRun(this, options)
+  }
+
   async info() {
-    this.ensureConnected();
-    return this.gradSsh!.exec('/LADAPPs/ladscripts/ladinfo', [], {
+    return this.exec('ladinfo', {
       execOptions: {
         pty: true,
       },

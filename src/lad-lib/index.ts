@@ -1,3 +1,3 @@
 export * from './lad';
-export * from './allocation';
+export * from './run';
 export * from './config-helper';
