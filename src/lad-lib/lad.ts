@@ -85,11 +85,7 @@ export class Lad extends EventEmitter {
   }
 
   async info() {
-    const result = await this.exec('ladinfo', {
-      execOptions: {
-        pty: true,
-      },
-    });
+    const result = await this.exec('ladinfo');
     if (result.code !== 0) return;
     const output = result.stdout;
     return parseInfo(output);

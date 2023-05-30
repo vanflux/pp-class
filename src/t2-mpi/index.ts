@@ -20,7 +20,7 @@ function watchFiles(lad: Lad) {
 }
 
 export const t2Setup = async ({ lad }: CLIContext) => {
-  console.log('[T1] Setup');
+  console.log('[T2] Setup');
   watchFiles(lad);
 };
 
