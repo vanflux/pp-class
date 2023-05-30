@@ -1,6 +1,8 @@
 # Programação Paralela
 
-Arrume o `.env` antes de rodar!
+Repositório para trabalhos de programação paralela e lib para se conectar no LAD da PUCRS.
+
+Arrume o `.env` antes de rodar! Olhe o [.env.example](.env.example) de exemplo para ter uma base de como configurar.
 
 ## T1 - OMP
 
