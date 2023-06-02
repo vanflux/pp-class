@@ -12,4 +12,6 @@ Rodar: `yarn t1`
 
 ## T2 - MPI
 
+O código para execução do game-of-life é de total propriedade de [PanPapag](https://github.com/PanPapag/Game-Of-Life)
+
 Rodar: `yarn t2`

@@ -7,6 +7,7 @@ import { CommandHandler } from './command-handler';
 import { t1CommandHandlers, t1Setup } from '../t1-omp';
 import { t2CommandHandlers, t2Setup } from '../t2-mpi';
 import { infoCommandHandler } from './handlers/info';
+import { execCommandHandler } from './handlers/exec';
 
 export interface CLIContext {
   commandHandlers: CommandHandler[];
@@ -32,7 +33,7 @@ async function main() {
       t2: t2Setup,
     }[t] ?? (() => {});
 
-  const commandHandlers = [helpCommandHandler, infoCommandHandler, ...tCommandHandlers];
+  const commandHandlers = [helpCommandHandler, infoCommandHandler, execCommandHandler, ...tCommandHandlers];
   const rl = createInterface({ input: stdin, output: stdout });
   const config = LadConfigHelper.fromEnv();
   const lad = new Lad();
